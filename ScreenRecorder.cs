@@ -16,7 +16,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 
 //import FFMPEG functionalities
-using Accord.Video.FFMPEG;
+//using Accord.Video.FFMPEG;
 
 
 namespace ScreenRec
