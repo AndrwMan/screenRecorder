@@ -24,8 +24,8 @@ namespace ScreenRec
 	{
 		//public static string FrameworkDescription { get; }
 		private Rectangle bounds;			//screen max dimensions
-		private string outputPath = ""; 	//user-specified location to save vid
-		private string tempPath = "";		//location where screenshots to be stitched as vid
+		private string outputPath = ""; 	//user-specified directory to save vid
+		private string tempPath = "";		//directory where screenshots to be stitched as vid
 		private int imgNum = 1;				//counter appended to imgName to uniquely ID img
 		private List<string> inputImgs = new List<string>(); //array storing imgNames to be stitched as vid
 	
@@ -63,6 +63,37 @@ namespace ScreenRec
 				string pathName = $"C://{name}";
 				Directory.CreateDirectory(pathName);
 				tempPath = pathName; 
+			}
+		}
+
+		private void ClearTempFolder(string targetDir) {
+			string[] storedImgs = Directory.GetFiles(targetDir);
+			string[] dirs = Directory.GetFiles(targetDir);
+
+			//set permissions, then delete all imgs
+			foreach(string img in storedImgs) {
+				File.SetAttributes(img, FileAttributes.Normal);
+				File.Delete(img);
+			}
+
+			//recursively delete all paths
+			foreach(string dir in dirs) {
+				ClearTempFolder(dir); 
+			}
+
+			//delete top-lvl, parent folder only
+			Directory.Delete(targetDir, false);	
+		}
+
+		private void ClearOutputFolder(string targetDir, string keepFile) {
+			string[] files = Directory.GetFiles(targetDir);
+
+			//delete every file that is Not final output
+			foreach(string file in files) {
+				if(file != keepFile) {
+					File.SetAttributes(file, FileAttributes.Normal);
+					File.Delete(file);
+				}
 			}
 		}
 	}
