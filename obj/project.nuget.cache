@@ -1,12 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "oj6X0159FW3HlZSJKWAi1U/a24xJWlf7UkWynttQKEJIkYWUPsnOJEax7CFJpdpwm8ec1NDrVgwfR36Hrjxtrw==",
+  "dgSpecHash": "VpzBcgxTu2wYIhcLwYOpVj8KQR+v3lsdVWu3v4leKufpgbiyJbLVuqRUwVYk8ZhGh5oiC/Su71us3rBZp1H3CQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\andre\\Desktop\\screenRecorder\\screenRecorder.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\andre\\.nuget\\packages\\accord\\3.8.0\\accord.3.8.0.nupkg.sha512",
     "C:\\Users\\andre\\.nuget\\packages\\accord.video\\3.8.0\\accord.video.3.8.0.nupkg.sha512",
-    "C:\\Users\\andre\\.nuget\\packages\\accord.video.ffmpeg\\3.8.0\\accord.video.ffmpeg.3.8.0.nupkg.sha512"
+    "C:\\Users\\andre\\.nuget\\packages\\accord.video.ffmpeg\\3.8.0\\accord.video.ffmpeg.3.8.0.nupkg.sha512",
+    "C:\\Users\\andre\\.nuget\\packages\\microsoft.aspnet.webapi.client\\5.2.9\\microsoft.aspnet.webapi.client.5.2.9.nupkg.sha512",
+    "C:\\Users\\andre\\.nuget\\packages\\microsoft.aspnet.webapi.core\\5.2.9\\microsoft.aspnet.webapi.core.5.2.9.nupkg.sha512",
+    "C:\\Users\\andre\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.2\\microsoft.netframework.referenceassemblies.1.0.2.nupkg.sha512",
+    "C:\\Users\\andre\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net472\\1.0.2\\microsoft.netframework.referenceassemblies.net472.1.0.2.nupkg.sha512",
+    "C:\\Users\\andre\\.nuget\\packages\\newtonsoft.json\\6.0.4\\newtonsoft.json.6.0.4.nupkg.sha512"
   ],
   "logs": []
 }

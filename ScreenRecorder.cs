@@ -16,8 +16,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 
 //import FFMPEG functionalities
-//using Accord.Video.FFMPEG;
-
+using Accord.Video.FFMPEG;
 
 namespace ScreenRec
 {
@@ -63,7 +62,7 @@ namespace ScreenRec
 			else {
 				string pathName = $"C://{name}";
 				Directory.CreateDirectory(pathName);
-				tempPath = pathName;
+				tempPath = pathName; 
 			}
 		}
 	}
