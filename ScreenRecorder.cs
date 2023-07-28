@@ -160,5 +160,37 @@ namespace ScreenRec
 			NativeMethods.record(audioPath, "", 0, 0);
 			NativeMethods.record("close recsound", "", 0, 0);
 		}
+
+		private void CombineVidAudio(string video, string audio) {
+			string command = $"/c ffmpeg -i \"{video}\" -i \"{audio}\" -shortest {finalName} ";
+			//create temp cmd prompt to run the ffmpeg cmd
+			//must ensure dir is correct so that cmd can find all args
+			ProcessStartInfo startInfo = new ProcessStartInfo{
+				CreateNoWindow = false,
+				FileName = "cmd.exe",
+				WorkingDirectory = outputPath,
+				Arguments = command
+			};
+
+			using (Process process = Process.Start(startInfo)) {
+				process.WaitForExit();
+			}
+		}
+
+		private void StopRecord() {
+			//orchestrate entire recording creation after stop
+			watch.Stop();
+
+			int width = bounds.Width;
+			int height = bounds.Height;
+			int frameRate = 10;
+
+			SaveAudio();
+			SaveVid(width, height, frameRate);
+			CombineVidAudio(videoName, audioName);
+
+			ClearTempFolder(tempPath);
+			ClearOutputFolder(outputPath, outputPath + "//" + finalName);
+		}
 	}
 }
