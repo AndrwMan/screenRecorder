@@ -121,9 +121,9 @@ namespace ScreenRec
 				}
 
 				//programmaticaly generate img file (& and their names) 
-				string imgName = tempPath + "//screenshot-" + imgNum + ".png";
-				bitmap.Save(imgName, ImageFormat.Png);
-				inputImgs.Add(imgName);
+				string imgPath = tempPath + "//screenshot-" + imgNum + ".png";
+				bitmap.Save(imgPath, ImageFormat.Png);
+				inputImgs.Add(imgPath);
 				imgNum++;
 
 				bitmap.Dispose();
@@ -136,6 +136,29 @@ namespace ScreenRec
 			NativeMethods.record("record recsound", "", 0, 0);
 		}
 
+		private void SaveVid(int width, int height, int frameRate) {
 
+			using(VideoFileWriter vidWriter = new VideoFileWriter()) {
+				//using MPEG to be consistent w/ the file extension we appended in videoName
+				vidWriter.Open(outputPath + "//" + videoName, width, height, frameRate, VideoCodec.MPEG4);
+
+				//use all imgs to construct vid
+				foreach(string imgPath in inputImgs) {
+					//must use `as` type conversion to bitmap to avoid error
+					Bitmap currFrame = System.Drawing.Image.FromFile(imgPath) as Bitmap;
+					vidWriter.WriteVideoFrame(currFrame);
+					currFrame.Dispose();
+				}
+
+				vidWriter.Close();
+			}
+
+		}
+
+		private void SaveAudio() {
+			string audioPath = "save recsound " + outputPath + "//" + audioName;
+			NativeMethods.record(audioPath, "", 0, 0);
+			NativeMethods.record("close recsound", "", 0, 0);
+		}
 	}
 }
