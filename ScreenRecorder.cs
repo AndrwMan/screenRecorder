@@ -112,6 +112,8 @@ namespace ScreenRec
 
 		public void RecordVid(){
 
+			watch.Start();
+
 			using(Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height)) {
 				//determine where to capture
 				using(Graphics graphics = Graphics.FromImage(bitmap)) {
@@ -127,5 +129,13 @@ namespace ScreenRec
 				bitmap.Dispose();
 			}
 		}
+
+		public void RecordAudio() {
+			//string is Not arbitary, representative of lpstrCommand
+			NativeMethods.record("open new Type waveaudio Alias recsound", "", 0, 0);
+			NativeMethods.record("record recsound", "", 0, 0);
+		}
+
+
 	}
 }
