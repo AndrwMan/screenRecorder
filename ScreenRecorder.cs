@@ -110,6 +110,22 @@ namespace ScreenRec
 			return string.Format("{0:D2}:{1:D2}:{2:D2}", watch.Elapsed.Hours, watch.Elapsed.Minutes, watch.Elapsed.Seconds);
 		}
 
+		public void RecordVid(){
 
+			using(Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height)) {
+				//determine where to capture
+				using(Graphics graphics = Graphics.FromImage(bitmap)) {
+					graphics.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
+				}
+
+				//programmaticaly generate img file (& and their names) 
+				string imgName = tempPath + "//screenshot-" + imgNum + ".png";
+				bitmap.Save(imgName, ImageFormat.Png);
+				inputImgs.Add(imgName);
+				imgNum++;
+
+				bitmap.Dispose();
+			}
+		}
 	}
 }
