@@ -96,5 +96,20 @@ namespace ScreenRec
 				}
 			}
 		}
+
+		public void cleanUp() {
+			//handles unexpected app closure
+			//clear lingering files 
+			if(Directory.Exists(tempPath)) {
+				ClearTempFolder(tempPath);
+			}
+		}
+
+		public string GetElapsedTime() {
+			//tracks time in HH/MM/SS format
+			return string.Format("{0:D2}:{1:D2}:{2:D2}", watch.Elapsed.Hours, watch.Elapsed.Minutes, watch.Elapsed.Seconds);
+		}
+
+
 	}
 }
