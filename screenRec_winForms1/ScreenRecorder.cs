@@ -1,22 +1,5 @@
-﻿/*using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace screenRec_winForms1
-{
-    internal class ScreenRecorder
-    {
-    }
-}
-*/
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 //need to modify graphics
 using System.Diagnostics;
@@ -65,7 +48,7 @@ namespace screenRec_winForms1
             outputPath = currOutPath;
         }
 
-        //TODO: docs
+        //TODO: styled docs for every function
         private void CreateTempFolder(string name)
         {
             //prioritize temp dir creation on D drive

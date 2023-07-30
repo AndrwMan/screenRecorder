@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using screenRec_winForms1;
 
 namespace screenRec_winForms1
 {
@@ -28,9 +21,10 @@ namespace screenRec_winForms1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            //no current functionalities upon Form loading
         }
 
+        //StartBtn functionalities
         private void button1_Click(object sender, EventArgs e)
         {
             bool containsMP4 = finalVidName.Contains(".mp4");
@@ -41,7 +35,6 @@ namespace screenRec_winForms1
                 //need to add public method
                 screenRec.setVideoName(finalVidName);
                 tmrRecord.Start();
-                //pbRec.Show();
             }
             else if (!pathSelected && containsMP4)
             {
@@ -62,17 +55,18 @@ namespace screenRec_winForms1
             }
         }
 
+        //StopBtn functionalities
         private void button1_Click_1(object sender, EventArgs e)
         {
             tmrRecord.Stop();
             screenRec.StopRecord();
-            //pbRec.Hide();
+            //resets app when 1 video is done
             Application.Restart();
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
-
+            //no current functionalities when timer display clicked
         }
 
         private void selectFolder_Click(object sender, EventArgs e)
