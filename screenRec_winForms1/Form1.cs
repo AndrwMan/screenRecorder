@@ -98,8 +98,9 @@ namespace screenRec_winForms1
         }
 
         private void txtSetName_TextChanged(object sender, EventArgs e)
-        {
-            //finalVidName = txtSetName.Text;
+        {   
+            //user-specified final combined output filename
+            finalVidName = txtSetName.Text;
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
