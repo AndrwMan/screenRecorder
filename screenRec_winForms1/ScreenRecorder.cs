@@ -11,6 +11,7 @@ using System.IO;
 
 //need for time-based features
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 //import FFMPEG functionalities
 using Accord.Video.FFMPEG;
@@ -45,8 +46,81 @@ namespace screenRec_winForms1
             CreateTempFolder("tempScreenshots");
 
             bounds = currWindow;
+            //bounds = GetScaledScreenBounds();
             outputPath = currOutPath;
         }
+
+        public void SetBounds(Rectangle newBounds, string currOutPath)
+        {
+            Console.Write(newBounds); 
+            //bounds = newBounds
+            bounds = GetScaledScreenBounds();
+            Console.Write("done");
+            outputPath = currOutPath;
+        }
+
+
+        //Adjust for screen scaling and resolution
+        public Rectangle GetScaledScreenBounds()
+        {
+            Screen primaryScreen = Screen.PrimaryScreen;
+            //FIXME: for variable resolution both approaches are unable to 
+            // correctly get scale factor needed to calc scaled width/height
+
+            //it turns out the entire issue is not having any way 
+            //of getting true scaled width & height directly...
+
+            //float dpiX = primaryScreen.Bounds.Width / primaryScreen.WorkingArea.Width;
+            //float dpiY = primaryScreen.Bounds.Height / primaryScreen.WorkingArea.Height;
+            //Console.Write("dpiX" + dpiX);
+            //Console.Write("dpiY" + dpiY);
+
+            int origWidth = primaryScreen.Bounds.Width;
+            int origHeight = primaryScreen.Bounds.Height; 
+            //int scaledWidth = (int)Math.Round(primaryScreen.Bounds.Width / dpiX);
+            //int scaledHeight = (int)Math.Round(primaryScreen.Bounds.Height / dpiY);
+            //Console.Write("scaledWidth" + scaledWidth);
+            //Console.Write("scaledHeight" + scaledHeight)
+
+            int desiredWidth = 1920;  // width after applying true scale factor
+            int desiredHeight = 1080; // height after applying true scale factor
+                
+            //ratio gives true scale factors
+            float widthScaleFactor = (float)desiredWidth / origWidth;
+            float heightScaleFactor = (float)desiredHeight / origHeight;
+            //float widthScaleFactor = Screen.PrimaryScreen.Bounds.Width * dpiX;
+            //float heightScaleFactor = Screen.PrimaryScreen.Bounds.Height * dpiY;
+
+            int adjustedWidth = (int)Math.Round(origWidth * widthScaleFactor);
+            int adjustedHeight = (int)Math.Round(origHeight * heightScaleFactor);
+
+            //float scaleFactor = GetScalingFactor();
+            //int adjustedWidth = (int)Math.Round(desiredWidth * scaleFactor);
+            //int adjustedHeight = (int)Math.Round(desiredHeight * scaleFactor);
+
+            return new Rectangle(primaryScreen.Bounds.Left, primaryScreen.Bounds.Top, adjustedWidth, adjustedHeight);
+            //return new Rectangle(primaryScreen.Bounds.Left, primaryScreen.Bounds.Top, scaledWidth, scaledHeight);
+        }
+
+        //explictly calculate scale factor to 
+        // verify against primaryScreen approach
+        private static float GetScalingFactor()
+        {
+            float dpiX, dpiY;
+
+            using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
+            {
+                dpiX = graphics.DpiX;
+                dpiY = graphics.DpiY;
+            }
+
+            // Calculate the scaling factor (assuming X and Y scaling factors are the same)
+            float scalingFactor = dpiX / 96.0f;
+            Console.Write("scalingFactor" + scalingFactor);
+
+            return scalingFactor;
+        }
+
 
         //TODO: styled docs for every function
         private void CreateTempFolder(string name)

@@ -8,7 +8,7 @@ namespace screenRec_winForms1
     {
         public Form1()
         {
-            InitializeComponent();
+            InitializeComponent(); 
         }
 
         // Init variables:
@@ -80,9 +80,12 @@ namespace screenRec_winForms1
                 outputPath = @folderBrowser.SelectedPath;
                 pathSelected = true;
 
-                //Finish screen recorder object:
-                Rectangle bounds = Screen.FromControl(this).Bounds;
-                screenRec = new ScreenRecorder(bounds, outputPath);
+                //Set properties of screen recorder object:
+                //Rectangle bounds = Screen.FromControl(this).Bounds;
+                //screenRec = new ScreenRecorder(bounds, outputPath);
+                //screenRec = new ScreenRecorder(Screen.FromControl(this).Bounds, outputPath);
+                //Screen.FromControl(this).Bounds returns unscaled width, height
+                screenRec.SetBounds(Screen.FromControl(this).Bounds, outputPath);
             }
             else
             {
