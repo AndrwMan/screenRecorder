@@ -22,6 +22,8 @@ namespace screenRec_winForms1
         private void Form1_Load(object sender, EventArgs e)
         {
             //no current functionalities upon Form loading
+            //takes integer, auto-round to 16 milliseconds for 60 fps
+            //tmrRecord.Interval = 1000 / 60;
         }
 
         //StartBtn functionalities
@@ -95,10 +97,37 @@ namespace screenRec_winForms1
 
         private void tmrRecord_Tick(object sender, EventArgs e)
         {
+            tmrRecord.Interval = 1000 / 65;
+            //1000 / 60 = 16 ms is theoretically correct
+            //Console.Write(tmrRecord.Interval); 
             screenRec.RecordVid();
             screenRec.RecordAudio();
             lblTimer.Text = screenRec.GetElapsedTime();
         }
+
+        //more manual method of deciding when to take frame using Date.Now
+        /*private DateTime startTime;
+        private void tmrRecord_Tick(object sender, EventArgs e) {
+            if (startTime == default(DateTime))
+            {
+                startTime = DateTime.Now;
+            }
+
+            DateTime currentTime = DateTime.Now;
+            TimeSpan elapsedTime = currentTime - startTime;
+
+            //there are approximately 6.29 less InputImgs
+            // need to take screenshots 6.29  times faster
+            if (elapsedTime.TotalMilliseconds >= 1000.0 / 300)
+            {
+                // Reset the start time for the next interval
+                startTime = currentTime;
+
+                screenRec.RecordVid();
+                screenRec.RecordAudio();
+                lblTimer.Text = screenRec.GetElapsedTime();
+            }
+        }*/
 
         private void txtSetName_TextChanged(object sender, EventArgs e)
         {   

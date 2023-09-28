@@ -11,6 +11,7 @@ using System.IO;
 
 //need for time-based features
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 
 //import FFMPEG functionalities
@@ -197,8 +198,14 @@ namespace screenRec_winForms1
 
         public void RecordVid()
         {
-
             watch.Start();
+
+            //handle entire frames creation in RecordVid() function
+
+            //Calc frame capture interval in millisecs based on desired frame rate
+            // redundant with tmrRecord_Tick() 
+            //int frameCaptureInterval = 1000 / 60; 
+            //while (true)
 
             using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
             {
@@ -216,6 +223,15 @@ namespace screenRec_winForms1
 
                 bitmap.Dispose();
             }
+
+            // Check if we have reached the desired recording duration
+            // but do not know recordingDuration until recording finishes
+            // a problem when we need record frames in real time
+            /*if (watch.Elapsed.TotalSeconds >= recordingDuration)
+                break;*/
+
+            // Sleep for a short time to control the frame capture rate
+            //Thread.Sleep(16); 
         }
 
         public void RecordAudio()
@@ -225,7 +241,8 @@ namespace screenRec_winForms1
             NativeMethods.record("record recsound", "", 0, 0);
         }
 
-        private void SaveVid(int width, int height, int frameRate)
+        //private void SaveVid(int width, int height, int frameRate)
+        private void SaveVid(int width, int height, int frameRate, int numFrames)
         {
 
             using (VideoFileWriter vidWriter = new VideoFileWriter())
@@ -234,10 +251,16 @@ namespace screenRec_winForms1
                 vidWriter.Open(outputPath + "//" + videoName, width, height, frameRate, VideoCodec.MPEG4);
 
                 //use all imgs to construct vid
-                foreach (string imgPath in inputImgs)
+                // numFrames ~= inputImgs.Count when desiredFrameRate = frameRate * 6.5 
+                Console.Write("numFrames" + numFrames);
+                Console.Write("inputImgs.Count" + inputImgs.Count);
+
+                //foreach (string imgPath in inputImgs)
+                for (int i = 0; i < numFrames && i < inputImgs.Count; i++)
                 {
                     //must use `as` type conversion to bitmap to avoid error
-                    Bitmap currFrame = System.Drawing.Image.FromFile(imgPath) as Bitmap;
+                    //Bitmap currFrame = System.Drawing.Image.FromFile(imgPath) as Bitmap;
+                    Bitmap currFrame = System.Drawing.Image.FromFile(inputImgs[i]) as Bitmap;
                     vidWriter.WriteVideoFrame(currFrame);
                     currFrame.Dispose();
                 }
@@ -280,10 +303,28 @@ namespace screenRec_winForms1
 
             int width = bounds.Width;
             int height = bounds.Height;
-            int frameRate = 35;
+            //the rate which approximately worked before adding 
+            // tmrRecord.Interval and recordingDuration adjustments
+            //int frameRate = 35;       
+            //the rate which works w/ tmrRecord.Interval, recordingDuration adjustments
+            // needs to be ~6 times less than desired frameRate in tmrRecord.Interval
+            int frameRate = 10;
+
+            // Get recording duration from the Stopwatch()
+            double recordingDuration = watch.Elapsed.TotalSeconds;
+            Console.Write("recordingDuration:" +  recordingDuration);
+
+            //alternative method: but tmrRecord is not avaliable
+            //double recordingDuration2 = tmrRecord.TickCount * (tmrRecord.Interval / 1000.0);
+            //Console.Write("recordingDuration2:" + recordingDuration2);
+
+            // Calculate the number of frames to include in the video
+            int numFrames = (int)(recordingDuration * frameRate);
+            Console.Write("numFrames:" + numFrames);
 
             SaveAudio();
-            SaveVid(width, height, frameRate);
+            //SaveVid(width, height, frameRate);
+            SaveVid(width, height, frameRate, numFrames); 
             CombineVidAudio(videoName, audioName);
 
             ClearTempFolder(tempPath);
